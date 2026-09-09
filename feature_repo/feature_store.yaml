@@ -1,0 +1,6 @@
+project: employee_attrition_22CS123
+registry: data/registry.db
+provider: local
+
+online_store:
+    path: data/online_store.db

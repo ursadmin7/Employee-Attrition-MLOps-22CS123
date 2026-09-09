@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.pyc
+
+# MLflow
+mlruns/
+mlflow.db
+
+# Feast generated files
+feature_repo/data/registry.db
+feature_repo/data/online_store.db
+
+# Generated artifacts
+artifacts/
+
+# Python environments
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+Thumbs.db
+.DS_Store
