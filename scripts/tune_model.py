@@ -32,7 +32,7 @@ df = pd.read_parquet(
 )
 
 df = df.drop(
-    columns=["Employee_ID", "feature_timestamp"]
+    columns=["Employee_ID", "feature_timestamp", "Data_Version"]
 )
 
 X = df.drop(columns=["Attrition"])
