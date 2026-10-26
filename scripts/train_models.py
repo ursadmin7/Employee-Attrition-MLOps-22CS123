@@ -23,21 +23,19 @@ from sklearn.metrics import (
 
 import matplotlib.pyplot as plt
 
-
 # --------------------------------------------------
 # 1. Load dataset
 # --------------------------------------------------
 
-df = pd.read_parquet(
-    "feature_repo/data/employee_features.parquet"
-)
+df = pd.read_parquet("feature_repo/data/employee_features.parquet")
 
-# Drop ID and timestamp
+# Drop ID, timestamp, and dataset version metadata
 df = df.drop(
-    columns=["Employee_ID", "feature_timestamp"]
+    columns=["Employee_ID", "feature_timestamp", "Data_Version"],
+    errors="ignore"
 )
 
-# Target
+# Separate features and target
 X = df.drop(columns=["Attrition"])
 y = df["Attrition"]
 
@@ -111,21 +109,23 @@ mlflow.set_experiment(
 models = {
     "Logistic Regression": LogisticRegression(
         max_iter=1000,
+        class_weight="balanced",
         random_state=42
     ),
 
     "Decision Tree": DecisionTreeClassifier(
         max_depth=5,
+        class_weight="balanced",
         random_state=42
     ),
 
     "Random Forest": RandomForestClassifier(
         n_estimators=100,
         max_depth=8,
+        class_weight="balanced",
         random_state=42
     )
 }
-
 
 # --------------------------------------------------
 # 7. Train models
@@ -244,7 +244,10 @@ for model_name, model in models.items():
         mlflow.sklearn.log_model(
     pipeline,
     name="model",
-    skops_trusted_types=["numpy.dtype"]
+    skops_trusted_types=[
+        "numpy.dtype",
+        "sklearn.tree._tree.Tree"
+    ]
 )
 
         results.append({
